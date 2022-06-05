@@ -9,7 +9,7 @@
                 <field name="name" string="Patient Name"/>
                 <field name="age"/>
                 <field name="gender"/>
-                <field name="ref"  />
+                <field name="ref"/>
             </tree>
         </field>
     </record>
@@ -32,6 +32,12 @@
                         </group>
                     </group>
                 </sheet>
+                <!-- Chatter -->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
@@ -41,19 +47,23 @@
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
             <search>
-                <field name="name" string="Patient Name" filter_domain="['|', ('name','ilike',self), ('ref','ilike',self)]"/>
+                <field name="name" string="Patient Name"
+                       filter_domain="['|', ('name','ilike',self), ('ref','ilike',self)]"/>
                 <field name="age"/>
                 <field name="gender"/>
                 <field name="ref"/>
-                <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]" />
+                <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]"/>
                 <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]"/>
-                <separator />
+                <separator/>
                 <filter name="filter_kids" string="Kids" domain="[('age', '&lt;=', 8)]"/>
-                <separator />
+                <separator/>
                 <filter name="filter_archived" string="Archived" domain="[('active', '=', False)]"/>
                 <group expand="0" string="Group By">
-                    <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}" />
+                    <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
                 </group>
+                <searchpanel>
+                    <field name="gender" string="Gender" select="multi" icon="fa-users" enable_counters="1"/>
+                </searchpanel>
             </search>
         </field>
     </record>
@@ -72,7 +82,7 @@
     </record>
 
     <menuitem id="menu_patient"
-              name="Patient"
+              name="Patients"
               parent="menu_patient_master"
               action="action_hospital_patient"
               groups=""

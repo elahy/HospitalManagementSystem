@@ -15,4 +15,11 @@
               groups=""
               sequence="0"/>
 
+    <menuitem id="menu_appointment_master"
+              name="Appointments"
+              parent="menu_hospital_root"
+              action=""
+              groups=""
+              sequence="1"/>
+
 </odoo>
