@@ -24,8 +24,9 @@ class HospitalAppointment(models.Model):
         ('in_consultation', 'In Consultation'),
         ('done', 'Done'),
         ('cancel', 'Canceled'),
-    ], string="Status", default='draft', required=True)
+    ], string="Status", default='draft', tracking=True, required=True)
     doctor_id = fields.Many2one('res.users', string='Doctor')
+    pharmacy_detail_ids = fields.One2many('appointment.pharmacy.details', 'appointment_id', string='Pharmacy Details')
 
 
 
@@ -42,3 +43,28 @@ class HospitalAppointment(models.Model):
                 'type': 'rainbow_man',
             }
         }
+
+    def action_in_consultation(self):
+        for rec in self:
+            rec.state = 'in_consultation'
+
+    def action_done(self):
+        for rec in self:
+            rec.state = 'done'
+
+    def action_cancel(self):
+        for rec in self:
+            rec.state = 'cancel'
+
+    def action_draft(self):
+        for rec in self:
+            rec.state = 'draft'
+
+class AppointmentPharmacyDetails(models.Model):
+    _name = "appointment.pharmacy.details"
+    _description = "Appointment Pharmacy Details"
+
+    product_id = fields.Many2one('product.product', required=True)
+    price_unit = fields.Float(string='Price', related='product_id.list_price')
+    qty = fields.Integer(string='Quantity', default=1)
+    appointment_id = fields.Many2one('hospital.appointment', string='Appointment')
