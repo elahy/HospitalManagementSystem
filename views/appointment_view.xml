@@ -5,12 +5,19 @@
         <field name="name">hospital.appointment.tree</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
-            <tree create="0" delete="0">
+            <tree create="0" delete="0" decoration-success="state == 'done'" decoration-danger="state == 'cancel'">
                 <field name="patient_id"/>
-                <field name="gender"/>
-                <field name="booking_date"/>
-                <field name="appointment_time"/>
-                <field name="ref"/>
+                <field name="ref" optional="hide"/>
+                <field name="gender" optional="hide"/>
+                <field name="doctor_id" widget="many2one_avatar_user"/>
+                <field name="booking_date" optional="show"/>
+                <field name="appointment_time" optional="show"/>
+                <field name="activity_ids" widget="list_activity"/>
+                <field name="state" widget="badge"
+                decoration-success="state == 'done'"
+                decoration-info="state == 'draft'"
+                decoration-warning="state == 'in_consultation'"
+                decoration-danger="state == 'cancel'"/>
             </tree>
         </field>
     </record>
@@ -35,6 +42,7 @@
                         <group>
                             <field name="patient_id"/>
                             <field name="gender"/>
+                            <field name="doctor_id" widget="many2one_avatar"/>
                             <button name="action_test" string="Object Button" type="object"
                                     help="On clicking this button a message will be printed in console"
                                     confirm="Are sure to execute the Python Code?" class="oe_highlight"/>
