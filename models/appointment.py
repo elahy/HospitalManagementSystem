@@ -27,7 +27,7 @@ class HospitalAppointment(models.Model):
     ], string="Status", default='draft', tracking=True, required=True)
     doctor_id = fields.Many2one('res.users', string='Doctor')
     pharmacy_detail_ids = fields.One2many('appointment.pharmacy.details', 'appointment_id', string='Pharmacy Details')
-
+    hide_sales_price = fields.Boolean(string="Hide Sales Price")
 
 
     @api.onchange('patient_id')
