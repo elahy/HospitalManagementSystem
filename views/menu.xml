@@ -22,4 +22,11 @@
               groups=""
               sequence="1"/>
 
+    <menuitem id="menu_configuration"
+              name="Configurations"
+              parent="menu_hospital_root"
+              action=""
+              groups=""
+              sequence="10"/>
+
 </odoo>

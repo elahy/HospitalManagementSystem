@@ -79,14 +79,14 @@
                                 <tree editable="bottom">
                                     <field name="product_id"/>
                                     <field name="price_unit"
-                                        attrs="{'column_invisible':[('parent.hide_sales_price', '=', True)]}"/>
+                                           attrs="{'column_invisible':[('parent.hide_sales_price', '=', True)]}"/>
                                     <field name="qty"/>
                                 </tree>
                                 <form>
                                     <group>
                                         <field name="product_id"/>
                                         <field name="price_unit"
-                                        attrs="{'column_invisible':[('parent.hide_sales_price', '=', True)]}"/>
+                                               attrs="{'column_invisible':[('parent.hide_sales_price', '=', True)]}"/>
                                         <field name="qty"/>
                                     </group>
                                 </form>
