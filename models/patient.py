@@ -11,10 +11,11 @@ class HospitalPatient(models.Model):
     date_of_birth = fields.Date(string='Date Of Birth', tracking=True, required=True)
     ref = fields.Char(string='Reference', required=True, default="Self")
     age = fields.Integer(string='Age', compute='_compute_age', tracking=True, required=True)
-    gender = fields.Selection([('male', 'Male'),('female', 'Female')], required=True, tracking=True, string='Gender')
+    gender = fields.Selection([('male', 'Male'), ('female', 'Female')], required=True, tracking=True, string='Gender')
     active = fields.Boolean(string="Active", default=True)
     appointment_id = fields.Many2one(comodel_name='hospital.appointment', string="Appointments")
     image = fields.Image(string="Image")
+    tag_ids = fields.Many2many('patient.tag', string='Tags')
 
     @api.depends('date_of_birth')
     def _compute_age(self):
