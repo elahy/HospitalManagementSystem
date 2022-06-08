@@ -29,4 +29,11 @@
               groups=""
               sequence="10"/>
 
+    <menuitem id="menu_cancel_appointment"
+              name="Cancellation"
+              parent="menu_appointment_master"
+              action="action_cancel_appointment"
+              groups=""
+              sequence="20"/>
+
 </odoo>
