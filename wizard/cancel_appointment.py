@@ -1,3 +1,4 @@
+from datetime import date
 from odoo import api, fields, models
 
 
@@ -7,10 +8,13 @@ class CancelAppointmentWizard(models.TransientModel):
 
     appointment_id = fields.Many2one('hospital.appointment', string='Appointment')
     reason = fields.Text(string="Reason")
-    # active = fields.Boolean(string='Active', default=True)
-    # color = fields.Integer(string='Color')
-    # other_color = fields.Char(string='Other Color')
+    date_cancel = fields.Date(string="Cancellation Date")
+
+    @api.model
+    def default_get(self, fields):
+        res = super(CancelAppointmentWizard, self).default_get(fields)
+        res['date_cancel'] = date.today()
+        return res
 
     def action_cancel_appointment(self):
-
         pass

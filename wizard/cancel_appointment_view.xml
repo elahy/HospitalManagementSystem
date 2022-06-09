@@ -12,6 +12,7 @@
                         <field name="reason"/>
                     </group>
                     <group>
+                        <field name="date_cancel"/>
                     </group>
                     <footer>
                         <button name="action_cancel_appointment" string="Cancel Appointment" type="object"
