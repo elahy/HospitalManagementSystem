@@ -24,7 +24,7 @@
         <field name="name">hospital.appointment.tree</field>
         <field name="model">hospital.appointment</field>
         <field name="arch" type="xml">
-            <tree create="0" delete="0" decoration-success="state == 'done'"
+            <tree create="1" delete="0" decoration-success="state == 'done'"
                   decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
                 <field name="patient_id"/>
                 <field name="ref" optional="hide"/>
