@@ -1,5 +1,6 @@
 from datetime import date
-from odoo import api, fields, models
+from odoo.exceptions import ValidationError
+from odoo import api, fields, models, _
 
 
 class HospitalPatient(models.Model):
@@ -17,6 +18,11 @@ class HospitalPatient(models.Model):
     image = fields.Image(string="Image")
     tag_ids = fields.Many2many('patient.tag', string='Tags')
 
+    @api.constrains('date_of_birth')
+    def _check_date_of_birth(self):
+        for rec in self:
+            if rec.date_of_birth and rec.date_of_birth > fields.Date.today():
+                raise ValidationError(_("Please Enter the Correct Date of Birth! "))
     @api.model
     def create(self, vals):
         vals['ref'] = self.env['ir.sequence'].next_by_code('hospital.patient')
