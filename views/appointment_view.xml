@@ -26,6 +26,10 @@
         <field name="arch" type="xml">
             <tree create="1" delete="0" decoration-success="state == 'done'"
                   decoration-danger="state == 'cancel'" sample="1" multi_edit="1">
+                <header>
+                    <button name="action_in_consultation" string="In Consultation" type="object"
+                            class="oe_highlight"/>
+                </header>
                 <field name="patient_id"/>
                 <field name="ref" optional="hide"/>
                 <field name="gender" optional="hide"/>
@@ -38,6 +42,13 @@
                        decoration-info="state == 'draft'"
                        decoration-warning="state == 'in_consultation'"
                        decoration-danger="state == 'cancel'"/>
+                <button name="action_done" type="object" class="fa fa-check btn-success"
+                        attrs="{'invisible':[('state', '!=', 'in_consultation')]}"/>
+                <button name="%(bm_hospital.action_cancel_appointment)d" type="action"
+                        context="{'default_appointment_id': active_id, 'default_reason': 'Unable to attend', 'hide_appointment':1}"
+                        class="fa fa-times btn-danger"
+                        attrs="{'invisible':[('state', 'not in', ('draft','in_consultation'))]}"
+                />
             </tree>
         </field>
     </record>
@@ -54,10 +65,10 @@
                     <button name="action_done" string="Mark As Done" type="object"
                             data-hotkey="t" class="oe_highlight" states="in_consultation"/>
                     <button name="%(bm_hospital.action_cancel_appointment)d" string="Cancel" type="action"
-                            context="{'default_appointment_id': active_id, 'hide_appointment':1}"
+                            context="{'default_appointment_id': active_id, 'default_reason': 'Unable to attend', 'hide_appointment':1}"
                             data-hotkey="v" states="draft,in_consultation"/>
-<!--                    <button name="action_cancel" string="Cancel" type="object"-->
-<!--                            data-hotkey="v" states="draft,in_consultation"/>-->
+                    <!--                    <button name="action_cancel" string="Cancel" type="object"-->
+                    <!--                            data-hotkey="v" states="draft,in_consultation"/>-->
                     <button name="action_draft" string="Reset To Draft" type="object"
                             data-hotkey="z" class="oe_highlight" states="cancel"/>
                     <!--<field name="state" widget="statusbar" nolabel="1" options="{'clickable':'1'}"-->
