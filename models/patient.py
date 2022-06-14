@@ -20,7 +20,8 @@ class HospitalPatient(models.Model):
     appointment_count = fields.Integer(string="Appointment Count", compute='_compute_appointment_count', store=True)
     appointment_ids = fields.One2many('hospital.appointment', 'patient_id', string="Appointments")
     parent = fields.Char(string='Parent Name')
-    marital_status = fields.Selection([('single', 'Single'),('married', 'Married')], string="Marital Status", tracking=True)
+    marital_status = fields.Selection([('single', 'Single'), ('married', 'Married')], string="Marital Status",
+                                      tracking=True)
     partner_name = fields.Char(string='Partner Name')
 
     @api.depends('appointment_ids')
@@ -33,12 +34,12 @@ class HospitalPatient(models.Model):
         for rec in self:
             if rec.date_of_birth and rec.date_of_birth > fields.Date.today():
                 raise ValidationError(_("Please Enter the Correct Date of Birth! "))
+
     @api.ondelete(at_uninstall=False)
     def _check_appointments(self):
         for rec in self:
             if rec.appointment_ids:
                 raise ValidationError(_("You cannot delete a patient with appointments !"))
-
 
     @api.model
     def create(self, vals):
@@ -64,6 +65,9 @@ class HospitalPatient(models.Model):
         # for record in self:
         #     name = record.ref + record.name
         #     patient_list.append((record.id, name))
-        #
         # return patient_list
         return [(record.id, "[%s] %s" % (record.ref, record.name)) for record in self]
+
+    def action_test(self):
+        print("Clicked")
+        return
