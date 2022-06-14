@@ -5,7 +5,7 @@
         <field name="name">hospital.patient.tree</field>
         <field name="model">hospital.patient</field>
         <field name="arch" type="xml">
-            <tree sample="1">
+            <tree export_xlsx="0" sample="1">
                 <field name="name" string="Patient Name"/>
                 <field name="age"/>
                 <field name="gender"/>
@@ -21,18 +21,34 @@
             <form>
                 <sheet>
                     <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h4>
+                            <field name="ref" readonly="1"/>
+                        </h4>
+                        <h2>
+                            <label for="name" string="Name" class="oe_edit_only"/>
+                            <field name="name"/>
+                        </h2>
+                    </div>
                     <group>
                         <group>
-                            <field name="name"/>
                             <field name="date_of_birth"/>
                             <field name="age"/>
                             <field name="appointment_id"/>
                         </group>
                         <group>
                             <field name="gender" invisible="context.get('hide_gender')"/>
-                            <field name="ref"/>
+                            <field name="appointment_count"/>
                             <field name="active" invisible="1"/>
                             <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        </group>
+                    </group>
+                    <group string="Other Information" name="other_info">
+                        <group>
+                            <field name="parent" attrs="{'invisible': [('age', '>=', 18)]}"/>
+                            <field name="marital_status" attrs="{'invisible': [('age', '&lt;=', 18)]}"/>
+                            <field name="partner_name" attrs="{'readonly': [('marital_status', '!=', 'married')],
+                                'required': [('marital_status', '=', 'married')] }"/>
                         </group>
                     </group>
                 </sheet>
