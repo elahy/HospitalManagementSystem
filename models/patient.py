@@ -1,6 +1,7 @@
 from datetime import date
 from odoo.exceptions import ValidationError
 from odoo import api, fields, models, _
+from dateutil import relativedelta
 
 
 class HospitalPatient(models.Model):
@@ -11,7 +12,8 @@ class HospitalPatient(models.Model):
     name = fields.Char(string='Name', tracking=True, required=True)
     date_of_birth = fields.Date(string='Date Of Birth', tracking=True, required=True)
     ref = fields.Char(string='Reference')
-    age = fields.Integer(string='Age', compute='_compute_age', tracking=True, required=True)
+    age = fields.Integer(string='Age', compute='_compute_age', inverse='_inverse_compute_age',
+                         search='_search_age', tracking=True, required=True)
     gender = fields.Selection([('male', 'Male'), ('female', 'Female')], required=True, tracking=True, string='Gender')
     active = fields.Boolean(string="Active", default=True)
     appointment_id = fields.Many2one(comodel_name='hospital.appointment', string="Appointments")
@@ -59,6 +61,21 @@ class HospitalPatient(models.Model):
                 rec.age = today.year - rec.date_of_birth.year
             else:
                 rec.age = 0
+
+    @api.depends('age')
+    def _inverse_compute_age(self):
+        today = date.today()
+        for rec in self:
+            if rec.age:
+                rec.date_of_birth = today - relativedelta.relativedelta(year=rec.age)
+            # else:
+            #     rec.age = 0
+
+    def _search_age(self, operator, value):
+        date_of_birth = date.today() - relativedelta.relativedelta(years=value)
+        start_of_year = date_of_birth.replace(day=1, month=1)
+        end_of_year = date_of_birth.replace(day=31, month=12)
+        return [('date_of_birth', '>=', start_of_year), ('date_of_birth', '<=', end_of_year)]
 
     def name_get(self):
         # patient_list = []

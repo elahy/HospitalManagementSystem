@@ -31,9 +31,10 @@ class HospitalAppointment(models.Model):
     hide_sales_price = fields.Boolean(string="Hide Sales Price")
 
     def unlink(self):
-        if self.state != 'draft':
-            raise ValidationError(_("You can delete appointment only in 'draft' state ! "))
-        return super(HospitalAppointment, self).unlink()
+        for rec in self:
+            if rec.state != 'draft':
+                raise ValidationError(_("You can delete appointment only in 'draft' state ! "))
+            return super(HospitalAppointment, self).unlink()
 
 
     @api.onchange('patient_id')
