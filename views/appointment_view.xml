@@ -90,6 +90,7 @@
                             <field name="patient_id" default_focus="1" widget="selection"/>
                             <field name="gender"/>
                             <field name="doctor_id" widget="many2one_avatar"/>
+                            <field name="operation_id" />
                             <button name="action_test" string="Object Button" type="object"
                                     help="On clicking this button a message will be printed in console"
                                     confirm="Are sure to execute the Python Code?" class="oe_highlight"

@@ -6,8 +6,10 @@ class HospitalAppointment(models.Model):
     _name = "hospital.appointment"
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = "Hospital Appointment"
-    _rec_name = 'ref'
+    _rec_name = 'name'
+    _order = 'id desc'
 
+    name = fields.Char(string='Sequence', default='New')
     patient_id = fields.Many2one(comodel_name='hospital.patient', string="Patient", ondelete='restrict')
     gender = fields.Selection([('male', 'Male'),('female', 'Female')], string='Gender', related='patient_id.gender')
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
@@ -29,6 +31,7 @@ class HospitalAppointment(models.Model):
     doctor_id = fields.Many2one('res.users', string='Doctor')
     pharmacy_detail_ids = fields.One2many('appointment.pharmacy.details', 'appointment_id', string='Pharmacy Details')
     hide_sales_price = fields.Boolean(string="Hide Sales Price")
+    operation_id = fields.Many2one(comodel_name='hospital.operation', string="Operation")
 
     def unlink(self):
         for rec in self:

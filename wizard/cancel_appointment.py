@@ -9,7 +9,7 @@ class CancelAppointmentWizard(models.TransientModel):
     _description = "Cancel Appointment Wizard"
 
     appointment_id = fields.Many2one('hospital.appointment', string='Appointment',
-                                     domain=[('priority', 'in', ('0','1', False))])
+                                     domain=[('priority', 'in', ('0', '1', False))])
     reason = fields.Text(string="Reason")
     date_cancel = fields.Date(string="Cancellation Date")
 
@@ -25,22 +25,10 @@ class CancelAppointmentWizard(models.TransientModel):
         cancel_day = self.env['ir.config_parameter'].get_param('bm_hospital.cancel_day')
         allowed_date = self.appointment_id.booking_date - relativedelta.relativedelta(days=int(cancel_day))
         if allowed_date < date.today():
+            # print(allowed_date, date.today())
             raise ValidationError(_("Sorry! Cancellation is not allowed for this booking!"))
         self.appointment_id.state = 'cancel'
-        return
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'reload',
+        }

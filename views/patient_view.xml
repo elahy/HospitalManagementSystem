@@ -7,7 +7,8 @@
         <field name="arch" type="xml">
             <tree export_xlsx="0" sample="1">
                 <field name="name" string="Patient Name"/>
-                <field name="age"/>
+                <field name="appointment_count" sum="Total Appointment"/>
+                <field name="age" avg="Avarage Age"/>
                 <field name="gender"/>
                 <field name="ref"/>
             </tree>
