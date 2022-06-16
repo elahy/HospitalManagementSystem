@@ -1,6 +1,7 @@
 from datetime import date
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
+from dateutil import relativedelta
 
 
 class CancelAppointmentWizard(models.TransientModel):
@@ -21,7 +22,25 @@ class CancelAppointmentWizard(models.TransientModel):
     def action_cancel_appointment(self):
         if self.appointment_id.booking_date == fields.Date.today():
             raise ValidationError(_("Sorry! Cancellation is not allowed on the same day of booking!"))
-        print("-----------------------------action Canceled Called--------------------", self.appointment_id.booking_date)
+        cancel_day = self.env['ir.config_parameter'].get_param('bm_hospital.cancel_day')
+        allowed_date = self.appointment_id.booking_date - relativedelta.relativedelta(days=int(cancel_day))
+        if allowed_date < date.today():
+            raise ValidationError(_("Sorry! Cancellation is not allowed for this booking!"))
         self.appointment_id.state = 'cancel'
-        print("-----------------------------action Canceled Called--------------------", self.appointment_id.state)
         return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
