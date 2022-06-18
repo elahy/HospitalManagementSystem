@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
 
+    <record id="action_mark_as_done" model="ir.actions.server">
+        <field name="name">Mark As Done</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_hospital_appointment"/>
+        <field name="binding_model_id" ref="model_hospital_appointment"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+            for rec in records:
+                if rec.state == "in_consultation":
+                    record.action_done()
+        </field>
+    </record>
+
     <record id="view_hospital_appointment_activity" model="ir.ui.view">
         <field name="name">hospital.appointment.activity</field>
         <field name="model">hospital.appointment</field>
@@ -90,7 +104,7 @@
                             <field name="patient_id" default_focus="1" widget="selection"/>
                             <field name="gender"/>
                             <field name="doctor_id" widget="many2one_avatar"/>
-                            <field name="operation_id" />
+                            <field name="operation_id"/>
                             <button name="action_test" string="Object Button" type="object"
                                     help="On clicking this button a message will be printed in console"
                                     confirm="Are sure to execute the Python Code?" class="oe_highlight"

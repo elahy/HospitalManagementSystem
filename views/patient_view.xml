@@ -21,6 +21,14 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <div class="alert alert-info text-center o_form_header" role="alert"
+                         attrs="{'invisible': [('is_birthday', '=', False)]}">
+                        <a class="close" data-dismiss="alert" href="#">x</a>
+                        <div>
+                            <strong>Today is <field name="name" readonly="1"/>'s Birtday!!!! </strong>
+                        </div>
+                        <div> Wish <field name="name" readonly="1"/> Happy Birthday! </div>
+                    </div>
                     <field name="image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
                         <h4>
@@ -36,6 +44,7 @@
                             <field name="date_of_birth"/>
                             <field name="age"/>
                             <field name="appointment_id"/>
+                            <field name="is_birthday"/>
                         </group>
                         <group>
                             <field name="gender" invisible="context.get('hide_gender')" widget='radio'/>
@@ -50,6 +59,11 @@
                             <field name="marital_status" attrs="{'invisible': [('age', '&lt;=', 18)]}"/>
                             <field name="partner_name" attrs="{'readonly': [('marital_status', '!=', 'married')],
                                 'required': [('marital_status', '=', 'married')] }"/>
+                        </group>
+                        <group>
+                            <field name="phone" widget="phone" />
+                            <field name="email" widget="email" />
+                            <field name="website" widget="url" />
                         </group>
                     </group>
                 </sheet>
