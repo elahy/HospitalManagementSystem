@@ -34,6 +34,18 @@
         </field>
     </record>
 
+    <record id="view_hospital_appointment_calendar" model="ir.ui.view">
+        <field name="name">hospital.appointment.calendar</field>
+        <field name="model">hospital.appointment</field>
+        <field name="arch" type="xml">
+            <calendar string="Appoointments" date_start="booking_date" mode="month" date_delay="duration"
+                        color="state" quick_add="False" hide_time="True" event_open_popup="True" event_limit="4">
+                <field name="patient_id" />
+                <field name="state" filters="1" />
+            </calendar>
+        </field>
+    </record>
+
     <record id="view_hospital_appointment_tree" model="ir.ui.view">
         <field name="name">hospital.appointment.tree</field>
         <field name="model">hospital.appointment</field>
@@ -67,6 +79,7 @@
                     <button name="action_test" string="Click Me" type="object" class="oe_highlight"/>
                     <button name="edit" string="Edit" type="edit"/>
                 </groupby>
+                <field name="progress" widget="progressbar"/>
             </tree>
         </field>
     </record>
@@ -104,6 +117,7 @@
                             <field name="patient_id" default_focus="1" widget="selection"/>
                             <field name="gender"/>
                             <field name="doctor_id" widget="many2one_avatar"/>
+                            <field name="duration"/>
                             <field name="operation_id"/>
                             <button name="action_test" string="Object Button" type="object"
                                     help="On clicking this button a message will be printed in console"
@@ -122,6 +136,11 @@
                         </group>
                     </group>
                     <notebook>
+                        <page string="Progress" name="progress">
+                            <field name="progress" widget="gauge"
+                                    options="{'style': 'width:120px; height:80px'}"/>
+<!--                            <field name="progress" widget="percentpie"/>-->
+                        </page>
                         <page string="Prescriptions" name="prescription">
                             <field name="prescription" placeholder="Enter your prescription"
                                    options="{'collaborative': true, 'resizable': true, 'codeview':true }"/>
@@ -170,7 +189,7 @@
         <field name="name">Appointment</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hospital.appointment</field>
-        <field name="view_mode">tree,form,activity</field>
+        <field name="view_mode">tree,form,calendar,activity</field>
         <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent">

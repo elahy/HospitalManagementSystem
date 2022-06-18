@@ -14,7 +14,7 @@ class HospitalAppointment(models.Model):
     gender = fields.Selection([('male', 'Male'),('female', 'Female')], string='Gender', related='patient_id.gender')
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
     booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
-    ref = fields.Char(string='Reference', required=True, default="Self")
+    ref = fields.Char(string='Reference')
     prescription = fields.Html(string='Prescription')
     priority = fields.Selection([
         ('0', 'Normal'),
@@ -32,6 +32,8 @@ class HospitalAppointment(models.Model):
     pharmacy_detail_ids = fields.One2many('appointment.pharmacy.details', 'appointment_id', string='Pharmacy Details')
     hide_sales_price = fields.Boolean(string="Hide Sales Price")
     operation_id = fields.Many2one(comodel_name='hospital.operation', string="Operation")
+    progress = fields.Integer(string="Progress", compute='_compute_progress')
+    duration = fields.Float(string="Duration")
 
     def unlink(self):
         for rec in self:
@@ -39,6 +41,10 @@ class HospitalAppointment(models.Model):
                 raise ValidationError(_("You can delete appointment only in 'draft' state ! "))
             return super(HospitalAppointment, self).unlink()
 
+    @api.model
+    def create(self, vals):
+        vals['ref'] = self.env['ir.sequence'].next_by_code('hospital.appointment')
+        return super(HospitalAppointment, self).create(vals) v
 
     @api.onchange('patient_id')
     def onchange_patient_id(self):
@@ -72,6 +78,20 @@ class HospitalAppointment(models.Model):
     def action_draft(self):
         for rec in self:
             rec.state = 'draft'
+
+    @api.depends('state')
+    def _compute_progress(self):
+        for rec in self:
+            if rec.state == 'draft':
+                progress = 25
+            elif rec.state == 'in_consultation':
+                progress = 50
+            elif rec.state == 'done':
+                progress = 100
+            else:
+                progress = 0
+            rec.progress = progress
+
 
 class AppointmentPharmacyDetails(models.Model):
     _name = "appointment.pharmacy.details"
