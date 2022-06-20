@@ -29,11 +29,18 @@ class HospitalPatient(models.Model):
     phone = fields.Char(string="Phone")
     email = fields.Char(string="Email")
     website = fields.Char(string="Website")
+    appointment_count = fields.Integer(compute='_compute_appointment_count', string='Appointment Count')
 
     @api.depends('appointment_ids')
     def _compute_appointment_count(self):
-        for rec in self:
-            rec.appointment_count = self.env['hospital.appointment'].search_count([('patient_id', '=', rec.id)])
+        appointment_group = self.env['hospital.appointment'].read_group(domain=[],
+                                                                        fields=['patient_id'], groupby=['patient_id'])
+        for appointment in appointment_group:
+            patient_id = appointment.get('patient_id')[0]
+            patient_rec = self.browse(patient_id)
+            patient_rec.appointment_count = appointment['patient_id_count']
+            self -= patient_rec
+        self.appointment_count = 0
 
     @api.constrains('date_of_birth')
     def _check_date_of_birth(self):
@@ -92,6 +99,7 @@ class HospitalPatient(models.Model):
     def action_test(self):
         print("Clicked")
         return
+
     @api.depends('date_of_birth')
     def _compute_is_birthday(self):
         for rec in self:
@@ -101,4 +109,3 @@ class HospitalPatient(models.Model):
                 if today.day == rec.date_of_birth.day and today.month == rec.date_of_birth.month:
                     is_birthday = True
             rec.is_birthday = is_birthday
-

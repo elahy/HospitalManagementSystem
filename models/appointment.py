@@ -44,7 +44,7 @@ class HospitalAppointment(models.Model):
     @api.model
     def create(self, vals):
         vals['ref'] = self.env['ir.sequence'].next_by_code('hospital.appointment')
-        return super(HospitalAppointment, self).create(vals) v
+        return super(HospitalAppointment, self).create(vals)
 
     @api.onchange('patient_id')
     def onchange_patient_id(self):
