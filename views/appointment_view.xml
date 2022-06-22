@@ -119,9 +119,9 @@
                             <field name="doctor_id" widget="many2one_avatar"/>
                             <field name="duration"/>
                             <field name="operation_id"/>
-                            <button name="action_test" string="Object Button" type="object"
-                                    help="On clicking this button a message will be printed in console"
-                                    confirm="Are sure to execute the Python Code?" class="oe_highlight"
+                            <button name="action_test" string="Visit Odoo.com" type="object"
+                                    help="On clicking this button you will be redirected to Odoo Website"
+                                    confirm="Are sure to redirect to this link?" class="oe_highlight"
                                     groups="base.group_no_one"/>
                             <button name="%(bm_hospital.action_hospital_patient)d" string="Action Button"
                                     help="On clicking this button you will be redirected to patients records"

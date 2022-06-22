@@ -51,11 +51,19 @@ class HospitalAppointment(models.Model):
         self.ref = self.patient_id.ref
 
     def action_test(self):
-        print("Hello World, Button Clicked")
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'new',
+            'url': 'https://www.odoo.com'
+        }
+
+    def action_done(self):
+        for rec in self:
+            rec.state = 'done'
         return {
             'effect': {
                 'fadeout': 'slow',
-                'message': 'Object Button Working Perfectly!',
+                'message': 'Done!',
                 'type': 'rainbow_man',
             }
         }
@@ -65,9 +73,9 @@ class HospitalAppointment(models.Model):
             if rec.state == 'draft':
                 rec.state = 'in_consultation'
 
-    def action_done(self):
-        for rec in self:
-            rec.state = 'done'
+    # def action_done(self):
+    #     for rec in self:
+    #         rec.state = 'done'
 
     def action_cancel(self):
         action = self.env.ref('bm_hospital.action_cancel_appointment').read()[0]
