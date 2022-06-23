@@ -95,6 +95,8 @@
                             data-hotkey="q" class="oe_highlight" states="draft"/>
                     <button name="action_done" string="Mark As Done" type="object"
                             data-hotkey="t" class="oe_highlight" states="in_consultation"/>
+                    <button name="action_share_whatsapp" string="Share In Whatsapp" type="object"
+                            data-hotkey="w" class="oe_highlight" icon="fa-whatsapp"/>
                     <button name="%(bm_hospital.action_cancel_appointment)d" string="Cancel" type="action"
                             context="{'default_appointment_id': active_id, 'default_reason': 'Unable to attend', 'hide_appointment':1}"
                             data-hotkey="v" states="draft,in_consultation"/>
@@ -127,6 +129,9 @@
                                     help="On clicking this button you will be redirected to patients records"
                                     confirm="Are sure to open the Patients window ?" type="action"
                                     groups="base.group_no_one" class="oe_highlight"/>
+                            <button name="action_notification" string="Display Notification" type="object"
+                                    help="On clicking this button you will be redirected to Patient Website"
+                                    class="oe_highlight" groups="base.group_no_one"/>
                         </group>
                         <group>
                             <field name="booking_date"/>

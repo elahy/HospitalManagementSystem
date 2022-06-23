@@ -11,7 +11,7 @@ class HospitalAppointment(models.Model):
 
     name = fields.Char(string='Sequence', default='New')
     patient_id = fields.Many2one(comodel_name='hospital.patient', string="Patient", ondelete='restrict')
-    gender = fields.Selection([('male', 'Male'),('female', 'Female')], string='Gender', related='patient_id.gender')
+    gender = fields.Selection([('male', 'Male'), ('female', 'Female')], string='Gender', related='patient_id.gender')
     appointment_time = fields.Datetime(string='Appointment Time', default=fields.Datetime.now)
     booking_date = fields.Date(string='Booking Date', default=fields.Date.context_today)
     ref = fields.Char(string='Reference')
@@ -50,6 +50,28 @@ class HospitalAppointment(models.Model):
     def onchange_patient_id(self):
         self.ref = self.patient_id.ref
 
+    def action_notification(self):
+        action = self.env.ref('bm_hospital.action_hospital_patient')
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': _('Click to open the patient record'),
+                'message': '%s',
+                'links': [{
+                    'label': self.patient_id.name,
+                    'url': f'#action={action.id}&id={self.patient_id.id}&model=hospital.patient',
+                }],
+                'sticky': False,
+                'next': {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'hospital.patient',
+                    'res_id': self.patient_id.id,
+                    'views': [(False, 'form')]
+                }
+            }
+        }
+
     def action_test(self):
         return {
             'type': 'ir.actions.act_url',
@@ -66,6 +88,18 @@ class HospitalAppointment(models.Model):
                 'message': 'Done!',
                 'type': 'rainbow_man',
             }
+        }
+
+    def action_share_whatsapp(self):
+        if not self.patient_id.phone:
+            raise ValidationError(_("Patient Record does not include Phone Number"))
+        msg = " Hi %s You have an appointment at BM Hospital" % self.patient_id.name
+        whatsapp_api_url = 'https://api.whatsapp.com/send?phone=%s&text=%s' % (self.patient_id.phone, msg)
+        self.message_post(body=msg, subject='Whatsapp')
+        return {
+            'type': 'ir.actions.act_url',
+            'target': 'new',
+            'url': whatsapp_api_url
         }
 
     def action_in_consultation(self):
